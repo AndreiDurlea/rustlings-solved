@@ -133,6 +133,80 @@ Read more about constants and the differences between variables and constants
 under 'Constants' in the book's section 'Variables and Mutability':
 https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#constants"""
 
+[[exercises]]
+name = "variables7"
+dir = "01_variables"
+test = false
+hint = """
+Compound assignment operators like `+=` and `*=` change the value stored in
+a variable. That's only allowed if the variable was declared as mutable."""
+
+[[exercises]]
+name = "variables8"
+dir = "01_variables"
+test = false
+hint = """
+Making `x` mutable fixes the compiler error, but then the second assertion
+fails because the outer `x` was changed.
+
+Instead, create a *new* variable `x` inside the block with `let`. It shadows
+the outer `x` only until the end of the block (`}`).
+https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#shadowing"""
+
+[[exercises]]
+name = "variables9"
+dir = "01_variables"
+test = false
+hint = """
+A variable only lives inside the block `{ ... }` where it was declared.
+When the block ends, the variable goes out of scope.
+
+Declare `greeting` *before* the inner block so that it is visible in both
+places."""
+
+[[exercises]]
+name = "variables10"
+dir = "01_variables"
+test = false
+hint = """
+In Rust, a block `{ ... }` is an expression. Its value is the value of its
+last expression, as long as that expression is *not* followed by a semicolon.
+
+`double_width + double_height;` is a statement, so the block evaluates to the unit type `()`."""
+
+[[exercises]]
+name = "variables11"
+dir = "01_variables"
+test = false
+hint = """
+You can declare a variable without a value and assign it later, *exactly once*,
+without making it mutable. The compiler checks that it is initialized before
+it is used.
+
+Assign `total = a + b;` inside the block, after `a` and `b` are declared."""
+
+[[exercises]]
+name = "variables12"
+dir = "01_variables"
+test = false
+hint = """
+The method `parse` can turn a string into many different types (`i32`, `u8`,
+`f64`, …). The compiler can't guess which one you want, so you need to tell it
+with a type annotation:
+
+```
+let x: SomeType = ...;
+```"""
+
+[[exercises]]
+name = "variables13"
+dir = "01_variables"
+test = false
+hint = """
+When destructuring a tuple with `let (a, b) = ...;`, each name in the pattern
+is its own variable. To make one of them mutable, put `mut` in front of that
+name inside the pattern: `let (mut a, b) = ...;`"""
+
 # FUNCTIONS
 
 [[exercises]]
@@ -187,6 +261,131 @@ There are two solutions:
 1. Add the `return` keyword before `num * num;`
 2. Remove the semicolon `;` after `num * num`"""
 
+# CONSTANTS AND STATICS
+
+[[exercises]]
+name = "constants1"
+dir = "02b_const_static"
+test = false
+hint = """
+The value of a constant has to be known at compile time. A `let` variable
+only exists while the program is running, so it can't be used to compute a
+constant.
+
+Turn `minutes_per_hour` into a constant too (constants are written in
+`SCREAMING_SNAKE_CASE` and need a type annotation)."""
+
+[[exercises]]
+name = "constants2"
+dir = "02b_const_static"
+test = false
+hint = """
+Constant expressions are evaluated by the compiler. If the computation
+overflows, you get a compile-time error instead of a bug at runtime!
+
+The maximum value of a `u32` is about 4.29 billion. A light year is a lot more
+meters than that. Which integer type is big enough?"""
+
+[[exercises]]
+name = "constants3"
+dir = "02b_const_static"
+test = false
+hint = """
+The length of an array is part of its type, so it must be known at compile
+time. A `let` variable won't do, but a `const` will!
+
+Array lengths have the type `usize`."""
+
+[[exercises]]
+name = "constants4"
+dir = "02b_const_static"
+test = false
+hint = """
+Normal functions can't be called when computing a constant because they are
+run at runtime. If you mark a function as `const fn`, the compiler is allowed
+to run it at compile time.
+https://doc.rust-lang.org/reference/const_eval.html#const-functions"""
+
+[[exercises]]
+name = "constants5"
+dir = "02b_const_static"
+test = false
+hint = """
+A constant declared inside a function is only visible inside that function.
+Constants declared at the top level of a file (outside of any function) are
+visible everywhere in that file (the module)."""
+
+[[exercises]]
+name = "statics1"
+dir = "02b_const_static"
+test = false
+hint = """
+Statics are declared like constants, but with the `static` keyword:
+
+```
+static NAME: Type = value;
+```
+
+Like constants, they need an explicit type. String literals have the type
+`&str` (or more precisely `&'static str`)."""
+
+[[exercises]]
+name = "statics2"
+dir = "02b_const_static"
+hint = """
+The compiler needs to know how long a returned reference is valid. Since
+the function takes no references as arguments, it can't figure that out
+itself.
+
+Data in a `static` lives for the whole duration of the program. This is
+written as the `'static` lifetime: `&'static str`."""
+
+[[exercises]]
+name = "statics3"
+dir = "02b_const_static"
+test = false
+hint = """
+Just like constants, statics are initialized at compile time. `String::from`
+allocates memory on the heap while the program is running, so it can't be used
+to initialize a static.
+
+A string literal (`&str`) is stored directly in the compiled program, so it's
+perfect for a static. Remember that `&str` can be compared with `==` to a
+`String` and vice versa.
+
+Note: `String::new()` would actually work because it is a `const fn` that
+doesn't allocate anything, but then the string would be empty."""
+
+[[exercises]]
+name = "statics4"
+dir = "02b_const_static"
+test = false
+hint = """
+Statics are immutable, so `VISITS += 1` wouldn't compile. A `static mut`
+would require `unsafe` code, which you should avoid (and which is forbidden in
+Rustlings).
+
+Atomic types like `AtomicU32` can be changed through a shared (immutable)
+reference, so they can be stored in a normal (non-`mut`) static without any
+`unsafe`.
+
+Look at the method `fetch_add` in the documentation:
+https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU32.html#method.fetch_add
+
+Don't worry about `Ordering` for now. `Ordering::Relaxed` is fine here."""
+
+[[exercises]]
+name = "statics5"
+dir = "02b_const_static"
+test = false
+hint = """
+A `const` doesn't have a fixed memory location. Every time you use it, the
+compiler inserts a *fresh copy* of its value. So each `CALLS.fetch_add(…)`
+increments a brand new temporary counter that is thrown away immediately.
+
+A `static` on the other hand has exactly one location in memory for the whole
+program. Change one keyword to fix the program."""
+
 # IF
 
 [[exercises]]
@@ -220,6 +419,59 @@ dir = "03_if"
 hint = """
 In Rust, every arm of an `if` expression has to return the same type of value.
 Make sure the type is consistent across all arms."""
+
+[[exercises]]
+name = "if4"
+dir = "03_if"
+hint = """
+When `if` is used as an expression (here as the return value of the
+function), every possible path must produce a value. An `if` without a final
+`else` produces `()` when no condition matches.
+
+Look at the tests to see what should be returned for `0`."""
+
+[[exercises]]
+name = "if5"
+dir = "03_if"
+hint = """
+Unlike C, JavaScript or Python, Rust has no "truthy" or "falsy" values.
+The condition of an `if` must be of type `bool`. Use a comparison operator
+like `==`, `!=`, `>` to turn the number into a `bool`."""
+
+[[exercises]]
+name = "if6"
+dir = "03_if"
+hint = """
+You can combine conditions with the logical operators:
+- `&&` (and)
+- `||` (or)
+- `!` (not)
+
+A year is a leap year if
+`(divisible by 4 AND NOT divisible by 100) OR divisible by 400`.
+"Divisible by 4" can be written as `year % 4 == 0` or `year.is_multiple_of(4)`."""
+
+[[exercises]]
+name = "if7"
+dir = "03_if"
+hint = """
+The conditions of an `if`/`else if` chain are checked from top to bottom, and
+only the *first* matching branch runs. A score of 95 is `>= 60`, so it gets a
+'D' before the other conditions are even looked at.
+
+Reorder the branches so that the most specific condition comes first."""
+
+[[exercises]]
+name = "if8"
+dir = "03_if"
+hint = """
+First check whether the triangle is valid at all:
+- No side can be 0.
+- The sum of any two sides must be greater than the third side
+  (`a + b > c`, `a + c > b` and `b + c > a`).
+
+You can use `return "invalid";` to return early from the function, or put
+the check as the first branch of the `if`/`else if` chain."""
 
 # QUIZ 1
 
@@ -297,6 +549,280 @@ indexing into it instead, as explained in the last example of the
 'Data Types -> The Tuple Type' section of the book:
 https://doc.rust-lang.org/book/ch03-02-data-types.html#the-tuple-type
 Now, you have another tool in your toolbox!"""
+
+[[exercises]]
+name = "primitive_types7"
+dir = "04_primitive_types"
+test = false
+hint = """
+Each integer type has a range of values it can hold:
+- `u8`: 0 to 255, `i8`: -128 to 127
+- `u16`: 0 to 65_535, `i16`: -32_768 to 32_767
+- `u32`: 0 to ~4.29 billion, `i32`: ~-2.1 billion to ~2.1 billion
+- `u64`: 0 to ~1.8 * 10^19, `i64`: ~-9.2 * 10^18 to ~9.2 * 10^18
+
+Unsigned types (`u…`) can't hold negative numbers. Pick the *smallest* type
+that fits each value (although bigger ones would work too).
+https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-types"""
+
+[[exercises]]
+name = "primitive_types8"
+dir = "04_primitive_types"
+hint = """
+Rust never converts between number types implicitly. Dividing two integers
+gives an integer (the remainder is dropped), and an integer can't be returned
+as an `f64`.
+
+Use `as` to convert: `some_integer as f64`. Remember that a float literal
+needs a decimal point: `3.0` instead of `3`."""
+
+[[exercises]]
+name = "primitive_types9"
+dir = "04_primitive_types"
+hint = """
+Floating point numbers can't represent every decimal exactly. That's why
+`0.1 + 0.2` is actually `0.30000000000000004`.
+
+Instead of `==`, check whether the *distance* between the two numbers is very
+small: `(a - b).abs() < TOLERANCE`. The constant `TOLERANCE` is already
+defined for you."""
+
+[[exercises]]
+name = "primitive_types10"
+dir = "04_primitive_types"
+hint = """
+In debug mode, an integer overflow makes the program panic. Integers have
+methods that let you choose explicitly what should happen instead:
+- `saturating_add`: stop at the maximum (or minimum) value.
+- `wrapping_add`: wrap around (255 + 1 becomes 0 for `u8`).
+
+There are also `saturating_sub`, `wrapping_sub`, `saturating_mul`, …
+https://doc.rust-lang.org/std/primitive.u8.html#method.saturating_add"""
+
+[[exercises]]
+name = "primitive_types11"
+dir = "04_primitive_types"
+hint = """
+`'7' as u32` gives you the Unicode code point of the character `'7'`, which
+is 55, not 7. The digits `'0'` to `'9'` have consecutive code points, so you
+can subtract the code point of `'0'`. Or take a look at `char::to_digit`.
+
+For `shift_letter`, `(c as u8 - b'a')` gives you the position of the letter
+in the alphabet (0 to 25). Add 1, use `% 26` to wrap around, then add `b'a'`
+back and convert the result to a `char` with `as char`."""
+
+[[exercises]]
+name = "primitive_types12"
+dir = "04_primitive_types"
+hint = """
+You can't add booleans together, but you can convert them into integers
+with `as`: `true as u32` is `1` and `false as u32` is `0`."""
+
+[[exercises]]
+name = "primitive_types13"
+dir = "04_primitive_types"
+hint = """
+The length of an array is part of its type: `[i32; 3]` and `[i32; 4]` are
+two different types!
+
+For the 2D grid, `grid[row][column]` first picks a row (an inner array) and
+then an element inside of it. Check which index is which."""
+
+[[exercises]]
+name = "primitive_types14"
+dir = "04_primitive_types"
+hint = """
+A function can return multiple values by returning a tuple. The return type
+of a function returning two `u32` values is `(u32, u32)`, and the returned
+value is written as `(first, second)`.
+
+The remainder of a division is computed with the `%` operator."""
+
+[[exercises]]
+name = "primitive_types15"
+dir = "04_primitive_types"
+hint = """
+The size of a type is how many bytes it takes in memory.
+- `u8`/`i8` take 1 byte, `u16` 2 bytes, `u32` 4 bytes, `u64` 8 bytes, `u128` 16 bytes.
+- `f32` takes 4 bytes and `f64` 8 bytes.
+- A `bool` takes 1 byte (although it only needs 1 bit).
+- A `char` can hold *any* Unicode character, so it always takes 4 bytes.
+- The unit type `()` holds no information at all.
+- An array of N elements takes N times the size of one element."""
+
+[[exercises]]
+name = "primitive_types16"
+dir = "04_primitive_types"
+hint = """
+Integer literals can be written in different bases:
+- hexadecimal: `0xff`
+- octal: `0o77`
+- binary: `0b1111_0000`
+- byte (only `u8`): `b'A'`
+
+You can also add the type as a suffix (`255u8`, `1.5f32`), and use `_` as a
+visual separator (`1_000_000`).
+https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-types"""
+
+# LOOPS AND MATCH
+
+[[exercises]]
+name = "loops1"
+dir = "04b_loops"
+test = false
+hint = """
+A `loop` is an expression too! You can return a value out of it by putting
+the value after `break`: `break some_value;`
+https://doc.rust-lang.org/book/ch03-05-control-flow.html#returning-values-from-loops"""
+
+[[exercises]]
+name = "loops2"
+dir = "04b_loops"
+hint = """
+A `while` loop runs as long as its condition is `true`. In each iteration,
+`n % 10` is the last digit and `n /= 10` removes it. When should the loop
+stop? Try `digit_sum(5)` and `digit_sum(10)` in your head.
+
+Also notice the `mut n` in the function signature: function parameters can be
+mutable too!"""
+
+[[exercises]]
+name = "loops3"
+dir = "04b_loops"
+hint = """
+The range `a..b` contains the numbers from `a` up to *but not including* `b`.
+The range `a..=b` *includes* `b`.
+
+So `1..5` is `1, 2, 3, 4` while `1..=5` is `1, 2, 3, 4, 5`."""
+
+[[exercises]]
+name = "loops4"
+dir = "04b_loops"
+hint = """
+A `for` loop can iterate directly over the elements of an array:
+`for element in array { ... }`.
+
+The compiler error tells you that a variable is changed although it isn't
+mutable."""
+
+[[exercises]]
+name = "loops5"
+dir = "04b_loops"
+hint = """
+Ranges have useful methods:
+- `.rev()` iterates in reverse order: `(1..=3).rev()` is `3, 2, 1`.
+- `.step_by(n)` only takes every n-th element: `(0..10).step_by(5)` is `0, 5`.
+
+Wrap the range in parentheses before calling a method on it."""
+
+[[exercises]]
+name = "loops6"
+dir = "04b_loops"
+hint = """
+- `continue` skips the rest of the current iteration and jumps to the next one.
+- `break` stops the whole loop.
+
+Negative numbers should be *skipped*, but `0` should *stop* the loop."""
+
+[[exercises]]
+name = "loops7"
+dir = "04b_loops"
+hint = """
+A plain `break` only exits the innermost loop. The outer loop keeps running
+and later pairs overwrite `result`.
+
+You can give a loop a *label* like `'outer: for ...` and then exit that loop
+from inside a nested loop with `break 'outer;`.
+https://doc.rust-lang.org/book/ch03-05-control-flow.html#loop-labels-to-disambiguate-between-multiple-loops"""
+
+[[exercises]]
+name = "loops8"
+dir = "04b_loops"
+hint = """
+Use a `while` loop that runs as long as `n != 1`. Inside of it:
+- If `n` is even (`n % 2 == 0` or `n.is_multiple_of(2)`), set `n` to `n / 2`.
+- Otherwise, set `n` to `3 * n + 1`.
+- Increment `steps` by 1."""
+
+[[exercises]]
+name = "loops9"
+dir = "04b_loops"
+hint = """
+`for c in haystack` gives you only the elements, not their positions.
+
+Calling `.into_iter().enumerate()` on the array gives you pairs of
+`(index, element)` that you can destructure directly in the `for` loop:
+`for (i, c) in haystack.into_iter().enumerate() { ... }`
+
+You can also use `return` inside a loop to leave the whole function early."""
+
+[[exercises]]
+name = "loops10"
+dir = "04b_loops"
+hint = """
+The loop checks divisors `d` while `d * d < n`. What about numbers like
+`9 = 3 * 3` or `25 = 5 * 5`? The divisor `d` with `d * d == n` must be
+checked too."""
+
+[[exercises]]
+name = "loops11"
+dir = "04b_loops"
+hint = """
+Use two nested `for` loops, one over the rows and one over the columns:
+
+```
+for row in 1..=SIZE {
+    for column in 1..=SIZE {
+        table[row - 1][column - 1] = ...;
+    }
+}
+```
+
+Remember that the indices start at 0, but the numbers in the table start at 1."""
+
+[[exercises]]
+name = "loops12"
+dir = "04b_loops"
+hint = """
+A `match` must be *exhaustive*: every possible value must be covered by an
+arm. A `u32` can be bigger than 64, so you need an arm for those values too.
+You can use an open range `65..` or the catch-all pattern `_`.
+https://doc.rust-lang.org/book/ch06-02-match.html"""
+
+[[exercises]]
+name = "loops13"
+dir = "04b_loops"
+hint = """
+Like `if`/`else if`, the arms of a `match` are checked from top to bottom and
+the first matching arm wins. `(0, _)` also matches `(0, 0)`, so the
+"FizzBuzz" arm is never reached. The compiler even warns you about it!
+
+For `letter_kind`, you can combine multiple patterns in one arm with `|`
+(`'a' | 'b' => ...`) and match a whole range of characters with `'a'..='z'`.
+Here too, the order of the arms matters!"""
+
+[[exercises]]
+name = "loops14"
+dir = "04b_loops"
+hint = """
+A `match` arm can have a *guard*: an extra `if` condition after the pattern.
+
+```
+match n {
+    x if x < 0 => "negative",
+    _ => "other",
+}
+```
+
+The arm only matches if the pattern matches *and* the guard is `true`."""
+
+# QUIZ BASICS
+
+[[exercises]]
+name = "quiz_basics"
+dir = "quizzes"
+hint = """
+No hints this time ;)"""
 
 # VECS
 

@@ -126,12 +126,12 @@ impl CmdRunner {
         let mut cmd = Command::new("cargo");
         cmd.arg(subcommand).arg("-q").arg("--bin").arg(bin_name);
 
-        // A hack to make `cargo run` work when developing Rustlings.
-        #[cfg(debug_assertions)]
-        cmd.arg("--manifest-path")
-            .arg("dev/Cargo.toml")
-            .arg("--target-dir")
-            .arg(&self.target_dir);
+        if std::path::Path::new("dev/Cargo.toml").exists() {
+            cmd.arg("--manifest-path")
+                .arg("dev/Cargo.toml")
+                .arg("--target-dir")
+                .arg(&self.target_dir);
+        }
 
         if output.is_some() {
             cmd.arg("--color").arg("always");

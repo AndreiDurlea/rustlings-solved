@@ -261,6 +261,62 @@ There are two solutions:
 1. Add the `return` keyword before `num * num;`
 2. Remove the semicolon `;` after `num * num`"""
 
+[[exercises]]
+name = "functions6"
+dir = "02_functions"
+test = false
+hint = """
+Function parameters are like variables declared with `let`: they are
+immutable by default. You can make a parameter mutable by writing `mut` in
+front of its name: `fn f(mut x: i32)`."""
+
+[[exercises]]
+name = "functions7"
+dir = "02_functions"
+hint = """
+A function can return several values at once by returning a tuple:
+`fn f() -> (u32, u32) { (1, 2) }`
+
+- Integer division `/` drops the remainder: `125 / 60 == 2`.
+- The remainder operator `%` gives what's left: `125 % 60 == 5`."""
+
+[[exercises]]
+name = "functions8"
+dir = "02_functions"
+test = false
+hint = """
+`print_sum` only *prints* the sum, it doesn't *return* it. A function without
+a `-> Type` returns the unit type `()`.
+
+Add a return type and make the last expression of the function the sum
+(without a semicolon)."""
+
+[[exercises]]
+name = "functions9"
+dir = "02_functions"
+hint = """
+Rust never mixes integers and floats automatically. `9 / 5` is an integer
+expression (and equal to 1!). Write float literals with a decimal point:
+`9.0 / 5.0`.
+
+The formulas are:
+- °F = °C * 9 / 5 + 32
+- °C = (°F - 32) * 5 / 9"""
+
+[[exercises]]
+name = "functions10"
+dir = "02_functions"
+test = false
+hint = """
+A function defined inside another function is still a completely separate
+function. It can't see the local variables (`let`) of the surrounding
+function.
+
+Two possible fixes:
+- Pass `factor` as an additional parameter.
+- Turn `factor` into a constant (`const FACTOR: i32 = 3;`). Constants *are*
+  visible to nested functions."""
+
 # CONSTANTS AND STATICS
 
 [[exercises]]
@@ -820,6 +876,603 @@ The arm only matches if the pattern matches *and* the guard is `true`."""
 
 [[exercises]]
 name = "quiz_basics"
+dir = "quizzes"
+hint = """
+No hints this time ;)"""
+
+# MORE FUNCTIONS
+
+[[exercises]]
+name = "functions11"
+dir = "04c_functions"
+hint = """
+A recursive function calls itself. It always needs a *base case* that
+returns without recursing, otherwise it would never stop.
+
+- fib(0) = 0, fib(1) = 1 (base cases)
+- fib(n) = fib(n - 1) + fib(n - 2)"""
+
+[[exercises]]
+name = "functions12"
+dir = "04c_functions"
+hint = """
+The Euclidean algorithm:
+- gcd(a, 0) = a
+- gcd(a, b) = gcd(b, a % b)
+
+The current code divides instead of computing the remainder. With `/`, `b`
+eventually becomes 0 and the program panics because of a division by zero."""
+
+[[exercises]]
+name = "functions13"
+dir = "04c_functions"
+hint = """
+An `if` without `else` inside a loop must evaluate to `()`. Writing `i` alone
+as the body of the `if` tries to make the `if` evaluate to `i`.
+
+To leave the whole function early with a value, use the `return` keyword:
+`return i;`"""
+
+[[exercises]]
+name = "functions14"
+dir = "04c_functions"
+hint = """
+A function can modify a variable of its caller if it receives a *mutable
+reference* to it:
+- The parameter type is `&mut u32`.
+- The caller passes `&mut variable`.
+- Inside the function, `*counter` accesses the value behind the reference
+  (this is called dereferencing)."""
+
+[[exercises]]
+name = "functions15"
+dir = "04c_functions"
+hint = """
+Arrays like `[i32; 4]` are *copied* when they are passed to a function. The
+function doubles the numbers in its own copy and the caller never sees it.
+
+Pass a mutable reference instead: the parameter type is `&mut [i32; 4]` and the
+caller passes `&mut numbers`. When you loop over a `&mut [i32; 4]` with
+`for n in numbers`, every `n` is a `&mut i32`, so you change it with `*n *= 2`."""
+
+[[exercises]]
+name = "functions16"
+dir = "04c_functions"
+hint = """
+Functions are values too! The type of a function that takes an `i32` and
+returns an `i32` is written `fn(i32) -> i32`. You can pass a function by its
+name (without calling it): `apply_twice(add_one, 5)`."""
+
+# ARRAYS
+
+[[exercises]]
+name = "arrays1"
+dir = "04d_arrays"
+test = false
+hint = """
+The type `[u32; 5]` means "an array of exactly 5 `u32` values". Count the
+elements on the right side. Either fix the length in the type or remove
+elements (but the assertions tell you which numbers must be there)."""
+
+[[exercises]]
+name = "arrays2"
+dir = "04d_arrays"
+test = false
+hint = """
+Changing an element of an array changes the array. Like any other variable,
+the array must be declared as mutable for that.
+
+`[0; 3]` creates an array with 3 elements that are all `0`."""
+
+[[exercises]]
+name = "arrays3"
+dir = "04d_arrays"
+hint = """
+Arrays of numbers are copied when assigned to another variable or passed to a
+function. Changing the copy doesn't change the original.
+
+Think about what each array contains at the end and replace the `???`."""
+
+[[exercises]]
+name = "arrays4"
+dir = "04d_arrays"
+hint = """
+Accessing an index that is out of bounds makes the program panic. Check the
+index before accessing the array: valid indices are `0` to `N - 1`."""
+
+[[exercises]]
+name = "arrays5"
+dir = "04d_arrays"
+hint = """
+Use a `for` loop over the array (`for n in numbers { ... }`) and add each
+element to a mutable variable.
+
+For the average, convert the sum and the number of elements into `f64` with
+`as`."""
+
+[[exercises]]
+name = "arrays6"
+dir = "04d_arrays"
+hint = """
+Loop over all elements and compare each one with `target`.
+
+For `contains`, you can `return true` as soon as you find it and return `false`
+after the loop. For `count`, use a mutable counter."""
+
+[[exercises]]
+name = "arrays7"
+dir = "04d_arrays"
+hint = """
+Create a new array filled with zeros (`[0; N]`) and fill it inside a loop.
+
+`for (i, n) in numbers.into_iter().enumerate()` gives you the index `i` and the
+element `n`. The element at index `i` must end up at index `N - 1 - i`."""
+
+[[exercises]]
+name = "arrays8"
+dir = "04d_arrays"
+hint = """
+A slice `&[i32]` is a view into a part of an array. Unlike `[i32; 5]`, its
+length isn't part of the type, so the same function works for any length.
+
+- `&numbers` turns a whole array into a slice.
+- `&numbers[1..4]` is a slice of the elements at the indices 1, 2 and 3.
+- `&numbers[..2]` starts at the beginning, `&numbers[3..]` goes to the end."""
+
+[[exercises]]
+name = "arrays9"
+dir = "04d_arrays"
+hint = """
+`grid[row][column]` accesses one cell. Use two nested `for` loops (or loop over
+the rows with `for row in grid` and then over the cells of each row).
+
+For the column sums, the column index stays the same while the row changes."""
+
+[[exercises]]
+name = "arrays10"
+dir = "04d_arrays"
+hint = """
+Loop over the array of tuples and destructure each tuple directly in the
+`for` loop: `for (name, age) in people { ... }`.
+
+Keep track of the oldest person seen so far in two mutable variables (or in
+one tuple). Use `>` (not `>=`) to keep the first person in case of a tie."""
+
+[[exercises]]
+name = "arrays11"
+dir = "04d_arrays"
+hint = """
+Bubble sort: walk through the array and compare each pair of neighbours
+`numbers[j]` and `numbers[j + 1]`. If they are in the wrong order, swap them.
+After one pass, the biggest element is at the end. Repeat this `N - 1` times.
+
+You can swap two elements with a tuple assignment:
+`(numbers[j], numbers[j + 1]) = (numbers[j + 1], numbers[j]);`"""
+
+# STRUCT BASICS
+
+[[exercises]]
+name = "struct_basics1"
+dir = "04e_structs"
+test = false
+hint = """
+A struct groups several named values (fields) together:
+
+```
+struct Name {
+    field1: Type1,
+    field2: Type2,
+}
+```
+
+Look at how `Point` is used in `main` to find out which fields it needs and
+what their types are.
+https://doc.rust-lang.org/book/ch05-01-defining-structs.html"""
+
+[[exercises]]
+name = "struct_basics2"
+dir = "04e_structs"
+test = false
+hint = """
+When you create a struct, you have to give a value to *every* field. The
+compiler tells you which field is missing.
+
+If a variable has the same name as a field, you can use the shorthand
+`Person { name, age, city }` instead of `Person { name: name, ... }`."""
+
+[[exercises]]
+name = "struct_basics3"
+dir = "04e_structs"
+test = false
+hint = """
+To change a field of a struct, the whole struct variable has to be declared as
+mutable. Rust doesn't allow marking only some fields as mutable."""
+
+[[exercises]]
+name = "struct_basics4"
+dir = "04e_structs"
+hint = """
+Structs can be passed to and returned from functions like any other value.
+Access the fields with a dot: `rect.width`.
+
+To create a new struct in `scale`, write `Rectangle { width: ..., height: ... }`
+as the last expression of the function."""
+
+[[exercises]]
+name = "struct_basics5"
+dir = "04e_structs"
+test = false
+hint = """
+Passing `rect` to a function *moves* it into the function. After that, the
+variable can't be used anymore.
+
+Let the functions *borrow* the rectangle instead: change the parameter type to
+`&Rectangle` and call the functions with `&rect`. Field access through a
+reference works the same way: `rect.width`."""
+
+[[exercises]]
+name = "struct_basics6"
+dir = "04e_structs"
+hint = """
+The function needs to change the caller's struct, so it has to receive a
+*mutable reference*: `player: &mut Player`. The caller then passes
+`&mut player`.
+
+Through the mutable reference, you can change fields directly:
+`player.x += dx;`"""
+
+[[exercises]]
+name = "struct_basics7"
+dir = "04e_structs"
+hint = """
+`assert_eq!` needs to compare two values with `==` and print them with `{:?}`
+if they are different. Structs can't do that by default.
+
+You can let the compiler generate this functionality by putting
+`#[derive(Debug, PartialEq)]` right above the struct definition.
+https://doc.rust-lang.org/book/appendix-03-derivable-traits.html"""
+
+[[exercises]]
+name = "struct_basics8"
+dir = "04e_structs"
+test = false
+hint = """
+The struct update syntax `..other` fills all fields that you didn't write
+explicitly with the values from `other`:
+
+```
+let b = Settings { volume: 80, ..a };
+```
+https://doc.rust-lang.org/book/ch05-01-defining-structs.html#creating-instances-from-other-instances-with-struct-update-syntax"""
+
+[[exercises]]
+name = "struct_basics9"
+dir = "04e_structs"
+hint = """
+Tuple structs have a name but their fields don't: `struct Meters(f64);`.
+You access the fields by position: `distance.0`.
+
+They are useful to give different meanings to values of the same type. The
+compiler won't let you pass `Feet` where `Meters` are expected!
+
+1 foot = 0.3048 meters."""
+
+[[exercises]]
+name = "struct_basics10"
+dir = "04e_structs"
+hint = """
+A struct can contain other structs as fields. Access nested fields with
+multiple dots: `line.start.x`.
+
+You can also destructure a struct with a pattern:
+`let Point { x, y } = line.start;` creates the variables `x` and `y`.
+
+The squared length of a line is `dx * dx + dy * dy` where `dx` and `dy` are the
+differences between the coordinates of the end and the start."""
+
+[[exercises]]
+name = "struct_basics11"
+dir = "04e_structs"
+hint = """
+You have an array of structs. Loop over it with `for student in students`.
+Each `student` is a `Student` and you can access its fields with
+`student.grade`.
+
+For `best_student`, keep track of the best student so far. Since `Student`
+derives `Clone` and `Copy`, it can be copied like a number."""
+
+# ENUM BASICS
+
+[[exercises]]
+name = "enum_basics1"
+dir = "04f_enums"
+hint = """
+An enum lists all possible variants of a type:
+
+```
+enum Name {
+    Variant1,
+    Variant2,
+}
+```
+
+A variant is used with the enum name as prefix: `Direction::North`.
+https://doc.rust-lang.org/book/ch06-01-defining-an-enum.html"""
+
+[[exercises]]
+name = "enum_basics2"
+dir = "04f_enums"
+hint = """
+A `match` on an enum must handle *every* variant. The compiler tells you which
+one is missing.
+
+Turning right from North gives East, from East gives South, …"""
+
+[[exercises]]
+name = "enum_basics3"
+dir = "04f_enums"
+hint = """
+Inside a `match`, the variants must be written with the enum name as prefix:
+`Weekday::Saturday`. Without the prefix, `Saturday` is just a new variable
+name that matches *anything*, so the first arm would always win! The compiler
+detects this mistake.
+
+You can also bring the variants into scope with `use Weekday::*;`, but the
+prefix is the clearer solution."""
+
+[[exercises]]
+name = "enum_basics4"
+dir = "04f_enums"
+hint = """
+Enum variants can carry data:
+- tuple-like: `Circle(f64)`
+- struct-like: `Rectangle { width: f64, height: f64 }`
+
+In a `match`, you extract the data with a pattern:
+`Shape::Rectangle { width, height } => width * height`
+
+The area of a circle is `PI * r * r`, the area of a triangle is
+`base * height / 2.0`."""
+
+[[exercises]]
+name = "enum_basics5"
+dir = "04f_enums"
+hint = """
+For enums without data, you can choose the number (discriminant) of each
+variant: `Ok = 200`. Converting a variant into that number is done with `as`:
+`status as u16`."""
+
+[[exercises]]
+name = "enum_basics6"
+dir = "04f_enums"
+hint = """
+An enum can be a field of a struct, and you can `match` on that field:
+`match card.suit { ... }`.
+
+Hearts and diamonds are red, clubs and spades are black. Combine several
+variants in one arm with `|`.
+
+In Blackjack, the rank 1 (ace) is worth 11 points, ranks 11, 12 and 13
+(jack, queen, king) are worth 10 points and all other ranks are worth their
+number."""
+
+[[exercises]]
+name = "enum_basics7"
+dir = "04f_enums"
+hint = """
+`if let` is a shorter `match` with only one interesting arm:
+
+```
+if let Payment::Card { number } = payment {
+    // `number` can be used here
+} else {
+    // all other variants
+}
+```
+https://doc.rust-lang.org/book/ch06-03-if-let.html"""
+
+[[exercises]]
+name = "enum_basics8"
+dir = "04f_enums"
+hint = """
+A `match` arm can have a guard: `Reading::Celsius(t) if t >= 30.0 => ...`.
+The arm only matches if the pattern matches *and* the guard is `true`.
+
+To compare Fahrenheit values, convert them first: °C = (°F - 32) * 5 / 9.
+Remember that the arms are checked from top to bottom."""
+
+[[exercises]]
+name = "enum_basics9"
+dir = "04f_enums"
+hint = """
+A traffic light is a small *state machine*: each state has a next state.
+Write a `match` with one arm per variant in both functions.
+
+The light cycles: Red -> Green -> Yellow -> Red -> ..."""
+
+[[exercises]]
+name = "enum_basics10"
+dir = "04f_enums"
+hint = """
+Sometimes a function has no result to give back. An enum with a variant for
+"nothing" and a variant carrying the value expresses this clearly (the standard
+library has a similar, more general type called `Option` that you will meet
+later).
+
+Return `Search::Found(index)` from inside the loop as soon as you find an even
+number, and `Search::NotFound` after the loop."""
+
+[[exercises]]
+name = "enum_basics11"
+dir = "04f_enums"
+hint = """
+Loop over the array of operations and update a mutable `value` variable with a
+`match` on each operation.
+
+For `Divide`, the guard `Op::Divide(0)` (or a match guard `if d == 0`) can be
+used to handle the division by zero."""
+
+# QUIZ DATA
+
+[[exercises]]
+name = "quiz_data"
+dir = "quizzes"
+hint = """
+No hints this time ;)"""
+
+# REFERENCES
+
+[[exercises]]
+name = "references1"
+dir = "04g_references"
+hint = """
+`n` is a *reference* to an `i32` (`&i32`), not an `i32` itself. You can't
+compare a reference with a number directly.
+
+Use the dereference operator `*` to get the value behind the reference:
+`*n > 0`."""
+
+[[exercises]]
+name = "references2"
+dir = "04g_references"
+test = false
+hint = """
+- A mutable reference can only be created to a mutable variable
+  (`let mut x`).
+- `r` is a `&mut i32`. To change the value behind it, dereference it:
+  `*r = 10;`. Writing `r = 10;` would try to change the reference itself."""
+
+[[exercises]]
+name = "references3"
+dir = "04g_references"
+test = false
+hint = """
+Rust allows only *one* mutable reference to a value at a time. But a reference
+only "lives" until its last use!
+
+Reorder the lines so that `first` is used for the last time *before* `second`
+is created.
+https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#mutable-references"""
+
+[[exercises]]
+name = "references4"
+dir = "04g_references"
+test = false
+hint = """
+While a shared reference (`&`) to a value is still going to be used, the value
+can't be changed. Otherwise, the reference would suddenly point to something
+different!
+
+Move the `println!` that uses `old` above the line that changes `temperature`."""
+
+[[exercises]]
+name = "references5"
+dir = "04g_references"
+hint = """
+Both parameters are mutable references. Read the values behind them and write
+the new values with `*a = ...` and `*b = ...`.
+
+A neat way to swap two values is a tuple assignment: `(*a, *b) = (*b, *a);`"""
+
+[[exercises]]
+name = "references6"
+dir = "04g_references"
+hint = """
+`counter` already *is* a `&mut u32`. Writing `&mut counter` would create a
+mutable reference to the reference itself (a `&mut &mut u32`), which requires
+`counter` to be mutable and has the wrong type anyway.
+
+Pass `counter` directly to `add_one`. Rust automatically "reborrows" it, so you
+can use it again afterwards."""
+
+[[exercises]]
+name = "references7"
+dir = "04g_references"
+hint = """
+`x` is a local variable of the function. It is destroyed when the function
+returns, so a reference to it would point to freed memory (a *dangling
+reference*). Rust doesn't allow that!
+
+Here, the simplest fix is to return the value itself (`i32`) instead of a
+reference.
+https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html#dangling-references"""
+
+[[exercises]]
+name = "references8"
+dir = "04g_references"
+hint = """
+A function can return a reference into one of its reference parameters. The
+returned reference then borrows from the caller's array.
+
+Keep a reference to the biggest element seen so far: start with
+`let mut largest = &numbers[0];` and loop over `numbers` (each element is a
+`&i32` then). Compare the values with `*n > *largest`."""
+
+[[exercises]]
+name = "references9"
+dir = "04g_references"
+hint = """
+You can create a reference to a single element of an array (`&mut scores[2]`)
+or to a field of a struct. Pass these to the functions."""
+
+[[exercises]]
+name = "references10"
+dir = "04g_references"
+hint = """
+Functions that only *read* the account can take a shared reference
+(`&Account`). Functions that *change* it need a mutable reference
+(`&mut Account`), and the caller must pass `&mut account`.
+
+Fields are accessed the same way through a reference: `account.balance`."""
+
+[[exercises]]
+name = "references11"
+dir = "04g_references"
+hint = """
+Looping over a reference to an array (`for n in numbers` where `numbers` is a
+`&[i32; N]`) gives you references to the elements (`&i32`).
+
+Either dereference them (`*n > limit`) or destructure the reference directly
+in the loop pattern: `for &n in numbers { ... }`."""
+
+[[exercises]]
+name = "references12"
+dir = "04g_references"
+hint = """
+`Player` isn't `Copy` (it doesn't derive it), so `players[0]` can't be moved
+out of an array that the function only borrowed. The array belongs to the
+caller!
+
+Return a *reference* to the player instead: change the return type to
+`&Player` and return `&players[...]`."""
+
+[[exercises]]
+name = "references13"
+dir = "04g_references"
+hint = """
+A mutable slice `&mut [i32]` lets a function change a *part* of an array.
+
+- `&mut numbers[1..4]` is a mutable slice of the elements at indices 1, 2 and 3.
+- Looping over a `&mut [i32]` gives you `&mut i32` elements:
+  `for n in slice { *n = value; }`"""
+
+[[exercises]]
+name = "references14"
+dir = "04g_references"
+hint = """
+When you `match` on a reference to an enum, the bindings in the patterns
+become references too. In `Shape::Square(side)`, `side` is a `&f64`.
+
+Arithmetic like `side * side` works with references to numbers, but returning
+`side` where an `f64` is expected doesn't: use `*side`.
+
+Matching on a reference also means that the enum isn't moved, so it can still
+be used after the function call."""
+
+# QUIZ REFERENCES
+
+[[exercises]]
+name = "quiz_references"
 dir = "quizzes"
 hint = """
 No hints this time ;)"""
